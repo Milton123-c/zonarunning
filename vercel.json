@@ -8,9 +8,14 @@
         }
     ],
     "routes": [
-        {
-            "src": "/(.*)",
-            "dest": "dist/src/server.js"
-        }
-    ]
+        { "handle": "filesystem" },
+        { 
+            "src": "/routes/(.*)", 
+            "dest": "dist/src/routes/index.js" 
+            }, 
+        { 
+            "src": "/(.*)", 
+            "dest": "dist/src/server.js" 
+            } 
+      ]
 }
