@@ -21,21 +21,19 @@ exports.getAll = (0, catchError_1.catchError)((_req, res) => __awaiter(void 0, v
     res.json(avatar);
 }));
 exports.create = (0, catchError_1.catchError)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    if (req.file) {
-        if (req.file.filename) {
-            const { path, filename } = req.file;
-            const images = yield (0, cloudinary_1.uploadToCloudinary)(path, filename);
-            if (images) {
-                const { url, public_id } = images;
-                const body = { url, filename: public_id };
-                const image = new Avatar_1.default(body);
-                yield image.save();
-                res.status(201).json(image);
-            }
+    if (req.files || Object.keys(req.files).length !== 0) {
+        const file = req.files.sampleFile;
+        const images = yield (0, cloudinary_1.uploadToCloudinary)(file.tempFilePath, file.name);
+        if (images) {
+            const { url, public_id } = images;
+            const body = { url, filename: public_id };
+            const image = new Avatar_1.default(body);
+            yield image.save();
+            res.status(201).json(image);
         }
-        else {
-            res.status(404);
-        }
+    }
+    else {
+        res.sendStatus(500);
     }
 }));
 exports.remove = (0, catchError_1.catchError)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
